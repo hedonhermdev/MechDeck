@@ -1,4 +1,3 @@
-
 # Classes for force, acceleration, velocity.
 class Force:
     __slots__ = ['x', 'y', 'magnitude']
@@ -6,7 +5,8 @@ class Force:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.magnitude = (self.x**2 + self.y**2)**(1/2)
+        self.magnitude = (self.x ** 2 + self.y ** 2) ** (1 / 2)
+
 
 class Acceleration:
     __slots__ = ['x', 'y', 'magnitude']
@@ -14,7 +14,7 @@ class Acceleration:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.magnitude = (self.x**2 + self.y**2)**(1/2)
+        self.magnitude = (self.x ** 2 + self.y ** 2) ** (1 / 2)
 
 
 class Velocity:
@@ -23,7 +23,7 @@ class Velocity:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.magnitude = (self.x**2 + self.y**2)**(1/2)
+        self.magnitude = (self.x ** 2 + self.y ** 2) ** (1 / 2)
 
 
 class Position:
@@ -32,10 +32,7 @@ class Position:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.magnitude = (self.x**2 + self.y**2)**(1/2)
-
-
-g = Acceleration(0, -10)  # Gravitational acceleration
+        self.magnitude = (self.x ** 2 + self.y ** 2) ** (1 / 2)
 
 
 # Class for defining a body.
@@ -49,11 +46,12 @@ class Body(object):
         self.forces = []
 
     def displace_body(self, acceleration, time):
-        disp_x = acceleration.x * (time ** 2) / 2
-        disp_y = acceleration.y * (time ** 2) / 2
+        disp_x = (self.velocity.x * time) + (acceleration.x * (time**2)/2)
+        disp_y = (self.velocity.y * time) + (acceleration.y * (time**2)/2)
         self.position.x += disp_x
         self.position.y += disp_y
-        self.position.magnitude = (self.position.x**2 + self.position.y**2)**(1/2)
+        self.position.magnitude = (self.position.x ** 2 + self.position.y ** 2) ** (1 / 2)
+        return disp_x, disp_y
 
     def accelerate(self, acceleration, time):
         self.velocity.x += acceleration.x * time
@@ -62,15 +60,9 @@ class Body(object):
     def apply_force(self, force_list, time):
         f_net_x = sum([f.x for f in force_list])
         f_net_y = sum([f.y for f in force_list])
-        self.acceleration.x = f_net_x/self.mass
-        self.acceleration.y = f_net_y/self.mass
-        self.acceleration.magnitude = (self.acceleration.x**2 + self.acceleration.y**2)**(1/2)
+        self.acceleration.x = f_net_x / self.mass
+        self.acceleration.y = f_net_y / self.mass
+        self.acceleration.magnitude = (self.acceleration.x ** 2 + self.acceleration.y ** 2) ** (1 / 2)
         self.displace_body(self.acceleration, time)
-        self.displace_body(self.acceleration, time)
-
-if __name__ == '__main__':
-    body1 = Body('b1', 10, Velocity(0, 0), Acceleration(0, 0), Position(5, 0))
-    forces = [Force(-1, -1), Force(1, -1)]
-    body1.apply_force(forces, 1)
-    print(body1.acceleration.magnitude, body1.position.x, body1.position.y)
+        self.accelerate(self.acceleration, time)
 
