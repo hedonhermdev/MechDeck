@@ -26,7 +26,7 @@ def vector_add(*args):
     vx = 0
     vy = 0
     for v in args:
-        x += v.x
-        y += v.y
+        vx += v.x
+        vy += v.y
     return Vector(x=vx, y=vy)
 
