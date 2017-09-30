@@ -1,29 +1,52 @@
 import kinematics as k
 import vectors as v
+import sympy as sp
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.rcParams['backend'] = "Qt4Agg"
 
 vel = v.Vector(i=10, j=0)
-body1 = k.Body('body1', k.origin, vel, v.Vector(i=100, j=0))
+body1 = k.OneDMotionBody('body1', 10)
 
-time = np.linspace(1, 10, 100)
+body1.motion_attr_func(displacement_time_function=k.t**2 + k.t*9)
 
-pos = []
+print(body1.attr_funcs)
 
 
-def calc_position(t):
-    return body1.velocity.i * t + 0.5 * body1.acceleration.i * t**2
+def calc_position_at_time(time):
+    return body1.attr_funcs['displacement_time'].subs(k.t, time)
 
-for t in time:
-    position = calc_position(t)
-    pos.append(position)
-print(time)
-print(pos)
 
-plt.plot(time, pos, 'r--')
+def calc_velocity_at_time(time):
+    return body1.attr_funcs['velocity_time'].subs(k.t, time)
+
+
+time_arr = np.linspace(0, 100, 100)
+
+disp_arr = []
+for time in time_arr:
+    d = body1.position.i + calc_position_at_time(time)
+    disp_arr.append(d)
+
+print(disp_arr)
+
+vel_arr = []
+for time in time_arr:
+    v = calc_velocity_at_time(time)
+    vel_arr.append(v)
+
+print(vel_arr)
+
+# Position-Time graph
+plt.plot(time_arr, disp_arr)
 plt.xlabel('Time')
 plt.ylabel('Position')
-plt.savefig('foo.png')
-#plt.show()
+plt.savefig('x-t_graph.png')
+plt.show()
+
+#Velocity-Time graph
+plt.plot(time_arr, vel_arr)
+plt.xlabel('Time')
+plt.ylabel('Velocity')
+plt.savefig('v-t_graph.png')
+plt.show()
