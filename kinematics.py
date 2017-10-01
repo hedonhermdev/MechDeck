@@ -62,9 +62,3 @@ class OneDMotionBody(Body):
         self.attr_funcs = attr_funcs
         return attr_funcs
 
-
-b1 = OneDMotionBody('b1', 10, 5, 10)
-print(b1.__dict__)
-print(b1.velocity.magnitude)
-v1 = Vector(magnitude=100, angle=3.14/4)
-print(v1.__dict__)
