@@ -13,7 +13,7 @@ class Body(object):
     """
 
     def __init__(self, name, position=Vector(i=0, j=0), velocity=Vector(i=0, j=0), acceleration=Vector(i=0, j=0),
-                 mass=0):
+                 mass=None):
         self.name = name
         self.mass = mass
         self.position = position  # Initial position of body.
@@ -36,9 +36,9 @@ class OneDMotionBody(Body):
     Class for defining bodies performing one dimensional motion. 
     """
 
-    def __init__(self, name, p_i=0, v_i=0, a_i=0, mass=0, **kwargs):
-        Body.__init__(self, name=name, position=Vector(i=p_i, j=0), velocity=Vector(i=v_i, j=0),
-                      acceleration=Vector(i=a_i, j=0), mass=mass)
+    def __init__(self, name, p=0, v=0, a=0, mass=0, **kwargs):
+        Body.__init__(self, name=name, position=Vector(magnitude=p, angle=0), velocity=Vector(magnitude=v, angle=0),
+                      acceleration=Vector(magnitude=a, angle=0), mass=mass)
 
     def motion_attr_func(self, **kwargs):
         attr_funcs = {
@@ -61,3 +61,10 @@ class OneDMotionBody(Body):
             attr_funcs['displacement_time'] = sp.integrate(attr_funcs['velocity_time'], t)
         self.attr_funcs = attr_funcs
         return attr_funcs
+
+
+b1 = OneDMotionBody('b1', 10, 5, 10)
+print(b1.__dict__)
+print(b1.velocity.magnitude)
+v1 = Vector(magnitude=100, angle=3.14/4)
+print(v1.__dict__)

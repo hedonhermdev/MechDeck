@@ -20,7 +20,7 @@ class Vector:
                 angle = atan2(j, i)
             else:
                 angle = pi / 2
-        elif 'magnitude' in kwargs and 'angle' in kwargs.items():
+        elif 'magnitude' in kwargs and 'angle' in kwargs:
             magnitude, angle = kwargs['magnitude'], kwargs['angle']
             i = magnitude * cos(angle)
             j = magnitude * sin(angle)
