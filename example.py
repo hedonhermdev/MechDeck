@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 vel = v.Vector(i=10, j=0)
 body1 = k.OneDMotionBody('body1', 10)
 
-body1.motion_attr_func(displacement_time_function=k.t**2 + k.t*9)
+body1.motion_attr_func(displacement_time_function=(k.t**3)/3)
 
 print(body1.attr_funcs)
 
@@ -19,6 +19,10 @@ def calc_position_at_time(time):
 
 def calc_velocity_at_time(time):
     return body1.attr_funcs['velocity_time'].subs(k.t, time)
+
+
+def calc_acceleration_at_time(time):
+    return body1.attr_funcs['acceleration_time'].subs(k.t, time)
 
 
 time_arr = np.linspace(0, 100, 100)
@@ -37,6 +41,13 @@ for time in time_arr:
 
 print(vel_arr)
 
+acc_arr = []
+for time in time_arr:
+    a = calc_acceleration_at_time(time)
+    acc_arr.append(a)
+
+print(acc_arr)
+
 # Position-Time graph
 plt.plot(time_arr, disp_arr)
 plt.xlabel('Time')
@@ -49,4 +60,11 @@ plt.plot(time_arr, vel_arr)
 plt.xlabel('Time')
 plt.ylabel('Velocity')
 plt.savefig('v-t_graph.png')
+plt.show()
+
+#Acceleration-Time graph
+plt.plot(time_arr, acc_arr)
+plt.xlabel('Time')
+plt.ylabel('Acceleration')
+plt.savefig('a-t_graph.png')
 plt.show()
