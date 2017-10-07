@@ -1,9 +1,9 @@
-from sympy import *
+import sympy as sp
 from mpmath import *
 
 
 def dot_product(vector1, vector2):
-    return (vector1.x * vector2.x) + (vector1.y * vector2.y)
+    return (vector1.i * vector2.i) + (vector1.j * vector2.j)
 
 
 class Vector:
@@ -27,30 +27,35 @@ class Vector:
         attrs = {'i': i, 'j': j, 'magnitude': magnitude, 'angle': angle}
         self.__dict__.update(attrs)
 
-    def unit_vector(self):
-        return Vector(i=(self.x/self.magnitude), j=(self.y/self.magnitude))
-
     def multiply_with_scalar(self, scalar):
         self.i *= scalar
-        print('i', self.i)
         self.j *= scalar
-        print('j', self.j)
+        self.magnitude = sqrt(self.i ** 2 + self.j ** 2)
 
-    def orthogonal_component_vector(self, vector_2):
+    def unit_vector(self):
+        if self.magnitude != 0:
+            return Vector(i=(self.i/self.magnitude), j=(self.j/self.magnitude))
+        else:
+            return Vector(i=0, j=0)
+
+    def orthogonal_component_vector(self, axis):
         xv = self.i
         yv = self.j
         print(xv, yv)
-        if vector_2 == 'x':
-            return Vector(x=xv, y=0)
-        elif vector_2 == 'y':
-            return Vector(x=0, y=yv)
+        if axis == 'x':
+            return Vector(i=xv, j=0)
+        elif axis == 'y':
+            return Vector(i=0, j=yv)
 
-    def component_on_vector(self, vector2):
+    def component_along_vector(self, vector2):
         a_, b_ = self.unit_vector(), vector2.unit_vector()
         magnitude = dot_product(a_, b_)
         b_.multiply_with_scalar(magnitude)
         return b_
 
+    def print_attributes(self):
+        for key, value in self.__dict__.items():
+            print(key, ":", value)
 
 i_ = Vector(x=1, y=0)  # Unit vector in +ve x direction.
 j_ = Vector(x=0, y=1)  # Unit vector in +ve y direction.
@@ -81,3 +86,4 @@ def vector_diff(*vectors):
 # For pretty printing
 mp.dps = 15
 mp.pretty = True
+
